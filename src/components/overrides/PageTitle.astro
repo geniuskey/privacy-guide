@@ -1,14 +1,21 @@
 ---
 import Default from '@astrojs/starlight/components/PageTitle.astro';
-import { STATUS_LABEL, CATEGORIES } from '../../lib/content-model';
+import { STATUS_LABEL, CATEGORIES, getSource } from '../../lib/content-model';
 
 const { entry } = Astro.locals.starlightRoute;
 const { status, lastVerified, reviewedBy, reviewedAt, category } = entry.data;
+// Pagefind 필터: 상세 검색 페이지에서 카테고리·상태·근거 법령·태그로 좁힐 수 있게 한다
+const basisTitles = [...new Set((entry.data.legalBasis ?? []).map((b) => getSource(b.source)?.title).filter(Boolean))];
+const tags = entry.data.tags ?? [];
 const fmt = (d?: Date) => d?.toISOString().slice(0, 10);
 const categoryLabel = CATEGORIES.find((c) => c.id === category)?.label;
 ---
 
 <Default />
+{categoryLabel && <meta data-pagefind-filter="카테고리[content]" content={categoryLabel} />}
+{status && <meta data-pagefind-filter="상태[content]" content={STATUS_LABEL[status]} />}
+{basisTitles.map((t) => <meta data-pagefind-filter="근거[content]" content={t} />)}
+{tags.map((t) => <meta data-pagefind-filter="태그[content]" content={t} />)}
 {
 	status && (
 		<div class="doc-meta" data-status={status}>

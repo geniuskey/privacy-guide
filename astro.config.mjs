@@ -41,6 +41,7 @@ export default defineConfig({
 						{ label: '이 가이드 사용법', slug: 'start/how-to-use' },
 						{ label: '자가진단', slug: 'self-check' },
 						{ label: '상황별 찾기', slug: 'start/by-situation' },
+						{ label: '상세 검색', slug: 'start/search' },
 					],
 				},
 				category('1. 개인정보 보호법과 관련 법령', 'laws'),

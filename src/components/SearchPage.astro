@@ -1,0 +1,125 @@
+---
+// Pagefind JS API로 만든 상세 검색. 필터: 카테고리·상태·근거(출처)·태그. 빌드 후에만 동작한다.
+// 검색어와 필터는 URL 쿼리(?q=)에만 반영하며 저장하거나 외부로 보내지 않는다.
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const FILTER_GROUPS = ['카테고리', '상태', '근거', '태그'];
+---
+
+<div id="pg-search" class="pg-search not-content" data-base={base}>
+	<input id="pg-q" type="search" placeholder="기능·법령·키워드 (예: 엑셀 다운로드, 주민등록번호, LLM)" aria-label="검색어" autocomplete="off" />
+	<div class="pg-layout">
+		<aside class="pg-filters" aria-label="필터">
+			{
+				FILTER_GROUPS.map((g) => (
+					<details open={g !== '태그'} data-group={g}>
+						<summary>{g}</summary>
+						<div class="pg-opts" />
+					</details>
+				))
+			}
+			<button type="button" id="pg-reset">필터 초기화</button>
+		</aside>
+		<section>
+			<p id="pg-status" role="status">검색어를 입력하거나 필터를 고르세요.</p>
+			<ol id="pg-results"></ol>
+		</section>
+	</div>
+</div>
+<noscript>검색에는 JavaScript가 필요합니다. 왼쪽 목차나 상황별 찾기를 이용하세요.</noscript>
+
+<script>
+	type PF = {
+		options(o: object): Promise<void>;
+		filters(): Promise<Record<string, Record<string, number>>>;
+		debouncedSearch(q: string | null, o: object, ms?: number): Promise<{ results: { data(): Promise<{ url: string; excerpt: string; meta: { title?: string } }> }[] } | null>;
+	};
+	const root = document.getElementById('pg-search')!;
+	const base = root.dataset.base ?? '/';
+	const q = document.getElementById('pg-q') as HTMLInputElement;
+	const statusEl = document.getElementById('pg-status')!;
+	const list = document.getElementById('pg-results')!;
+	const selected: Record<string, Set<string>> = {};
+
+	const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+	// Pagefind excerpt에는 <mark>만 들어온다. 그 외 태그는 이스케이프한다.
+	const safeExcerpt = (s: string) => esc(s).replace(/&lt;mark&gt;/g, '<mark>').replace(/&lt;\/mark&gt;/g, '</mark>');
+
+	let pf: PF;
+	try {
+		pf = (await import(/* @vite-ignore */ `${base}pagefind/pagefind.js`)) as PF;
+		await pf.options({ baseUrl: base });
+	} catch {
+		statusEl.textContent = '검색 인덱스는 빌드된 사이트에서만 사용할 수 있습니다 (npm run build && npm run preview).';
+		throw new Error('pagefind unavailable');
+	}
+
+	const filters = await pf.filters();
+	for (const details of root.querySelectorAll<HTMLDetailsElement>('details[data-group]')) {
+		const g = details.dataset.group!;
+		selected[g] = new Set();
+		const opts = details.querySelector('.pg-opts')!;
+		const entries = Object.entries(filters[g] ?? {}).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ko'));
+		opts.innerHTML = entries
+			.map(([v, n]) => `<label><input type="checkbox" value="${esc(v)}"><span>${esc(v)}</span><small>${n}</small></label>`)
+			.join('');
+		opts.addEventListener('change', (e) => {
+			const t = e.target as HTMLInputElement;
+			t.checked ? selected[g].add(t.value) : selected[g].delete(t.value);
+			run();
+		});
+	}
+
+	async function run() {
+		const term = q.value.trim();
+		const filter = Object.fromEntries(Object.entries(selected).filter(([, s]) => s.size).map(([g, s]) => [g, { any: [...s] }]));
+		const hasFilter = Object.keys(filter).length > 0;
+		const url = new URL(location.href);
+		term ? url.searchParams.set('q', term) : url.searchParams.delete('q');
+		history.replaceState(null, '', url);
+		if (!term && !hasFilter) {
+			list.innerHTML = '';
+			statusEl.textContent = '검색어를 입력하거나 필터를 고르세요.';
+			return;
+		}
+		const res = await pf.debouncedSearch(term || null, { filters: filter }, 200);
+		if (!res) return; // 더 새로운 검색이 진행 중
+		const data = await Promise.all(res.results.slice(0, 30).map((r) => r.data()));
+		statusEl.textContent = `${res.results.length}개 문서${res.results.length > 30 ? ' (상위 30개 표시)' : ''}`;
+		list.innerHTML = data
+			.map((d) => `<li><a href="${esc(d.url)}">${esc(d.meta.title ?? d.url)}</a><p>${safeExcerpt(d.excerpt)}</p></li>`)
+			.join('');
+	}
+
+	q.addEventListener('input', run);
+	document.getElementById('pg-reset')!.addEventListener('click', () => {
+		root.querySelectorAll<HTMLInputElement>('.pg-opts input').forEach((i) => (i.checked = false));
+		Object.values(selected).forEach((s) => s.clear());
+		run();
+	});
+	const initial = new URLSearchParams(location.search).get('q');
+	if (initial) {
+		q.value = initial;
+		run();
+	}
+</script>
+
+<style>
+	.pg-search { margin-top: 1rem; }
+	#pg-q { width: 100%; font: inherit; padding: 0.7rem 0.9rem; border: 1px solid var(--sl-color-gray-5); border-radius: 0.5rem; background: var(--sl-color-bg); color: var(--sl-color-white); }
+	#pg-q:focus { outline: 2px solid var(--sl-color-accent); outline-offset: 1px; }
+	.pg-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 1rem; }
+	@media (min-width: 50rem) { .pg-layout { grid-template-columns: 15rem minmax(0, 1fr); } }
+	.pg-filters details { border-bottom: 1px solid var(--sl-color-hairline); padding: 0.4rem 0; }
+	.pg-filters summary { font-weight: 600; cursor: pointer; color: var(--sl-color-white); }
+	.pg-opts { max-height: 16rem; overflow-y: auto; padding: 0.25rem 0; }
+	.pg-opts :global(label) { display: flex; gap: 0.4rem; align-items: flex-start; font-size: var(--sl-text-sm); padding: 0.15rem 0; cursor: pointer; }
+	.pg-opts :global(input) { margin-top: 0.3rem; accent-color: var(--sl-color-accent); }
+	.pg-opts :global(small) { margin-left: auto; color: var(--sl-color-gray-3); }
+	#pg-reset { margin-top: 0.75rem; font: inherit; font-size: var(--sl-text-sm); padding: 0.35rem 0.8rem; border-radius: 0.375rem; border: 1px solid var(--sl-color-gray-5); background: transparent; color: var(--sl-color-text); cursor: pointer; }
+	#pg-status { margin: 0 0 0.5rem; font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+	#pg-results { list-style: none; padding: 0; margin: 0; }
+	#pg-results :global(li) { padding: 0.75rem 0; border-bottom: 1px solid var(--sl-color-hairline); }
+	#pg-results :global(a) { font-weight: 600; }
+	#pg-results :global(p) { margin: 0.25rem 0 0; font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+	#pg-results :global(mark) { background: var(--sl-color-accent-low); color: var(--sl-color-white); }
+</style>
