@@ -25,7 +25,7 @@ sidebar:
 ## 리뷰 워크플로
 
 1. 이슈 담당자가 공식 원문에서 변경 내용과 시행일을 확인합니다.
-2. 영향받는 문서를 고치는 PR을 엽니다. `legalBasis[].status`, `lastVerified`, `data/sources.json`을 갱신하고 `node scripts/check-sources.mjs --update-snapshots`로 스냅샷(`data/law-snapshots/`)을 갱신합니다.
+2. 영향받는 문서를 고치는 PR을 엽니다. `legalBasis[].status`, `lastVerified`, `data/sources.json`을 갱신하고 `node scripts/check-sources.mjs --update-snapshots`로 스냅샷(`data/law-snapshots/`)을, `node scripts/build-skill-references.mjs`로 Skill의 원문 발췌를 갱신합니다(둘 다 `LAW_OC` 필요).
 3. CI가 `validate:content`, 테스트, 빌드를 실행합니다.
 4. 검토자(CODEOWNERS)가 승인하면 병합하고, main 브랜치 병합 시 자동으로 배포됩니다.
 5. 법률 전문가 검토를 마친 문서만 `status: reviewed`와 `reviewedBy`, `reviewedAt`을 적습니다.

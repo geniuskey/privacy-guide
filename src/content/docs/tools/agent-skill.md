@@ -19,6 +19,7 @@ skills/kr-privacy-review/
    ├─ code-review-checklist.md      # 보안 코드리뷰 체크리스트
    ├─ test-case-templates.md        # 테스트 케이스 템플릿
    ├─ report-template.md            # 보고서 형식
+├─ examples/sample-review.md        # 회원 내보내기 PR 검토 예시
    └─ law/                          # 국가법령정보센터 Open API로 받은 현행 원문 발췌
       ├─ pipa-key-articles.md
       ├─ pipa-decree-key-articles.md
@@ -26,11 +27,21 @@ skills/kr-privacy-review/
       └─ related-laws-excerpts.md
 ```
 
-Skill이 조문을 기억으로 만들지 않도록 원문 발췌를 함께 넣었습니다. 발췌의 수집일은 2026-10-23이며, 이 저장소의 [출처 변경 감지](/about/maintenance/)가 법령 개정을 알리면 함께 갱신합니다.
+Skill이 조문을 기억으로 만들지 않도록 원문 발췌를 함께 넣었습니다. CI 테스트가 Skill 참고 파일과 예시에 인용된 조문이 모두 발췌에 있는지, 발췌 버전이 출처 레지스트리와 같은지 확인합니다. 발췌의 수집일은 2026-10-23이며, 이 저장소의 [출처 변경 감지](/about/maintenance/)가 법령 개정을 알리면 함께 갱신합니다.
 
 ## 설치
 
-다른 저장소에서 쓰려면 폴더를 복사합니다.
+설치 스크립트로 복사합니다.
+
+```bash
+# 사용자 전역 (~/.claude/skills)
+curl -fsSL https://raw.githubusercontent.com/geniuskey/privacy-guide/main/skills/install.sh | sh -s -- --user
+
+# 특정 프로젝트 (<repo>/.claude/skills)
+sh skills/install.sh /path/to/your-repo
+```
+
+직접 복사해도 됩니다.
 
 ```bash
 # Claude Code: 프로젝트 단위

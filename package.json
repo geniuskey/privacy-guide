@@ -12,6 +12,7 @@
     "test": "vitest run",
     "validate:content": "node scripts/validate-content.mjs",
     "watch:sources": "node scripts/check-sources.mjs",
+    "build:skill-refs": "node scripts/build-skill-references.mjs",
     "astro": "astro"
   },
   "dependencies": {

@@ -31,7 +31,7 @@ const REVIEW_STEPS = `
 ### 검토 절차
 1. 공식 원문(국가법령정보센터·발행기관)에서 변경 내용과 **시행일**을 확인한다. 시행 전이면 현재 의무로 쓰지 않는다.
 2. 위 문서에서 영향받는 서술을 고치고, \`legalBasis\`의 상태와 \`lastVerified\`를 갱신한다.
-3. \`data/sources.json\`의 version/effectiveAt/lastChecked를 갱신하고 \`node scripts/check-sources.mjs --update-snapshots\`로 스냅샷을 갱신한다.
+3. \`data/sources.json\`의 version/effectiveAt/lastChecked를 갱신하고 \`node scripts/check-sources.mjs --update-snapshots\`로 스냅샷을, \`node scripts/build-skill-references.mjs\`로 Skill 원문 발췌를 갱신한다.
 4. AI로 변경 비교 초안을 만들 수 있지만, 검토자 승인 전에는 확정 내용으로 병합하지 않는다.
 `;
 

@@ -39,8 +39,9 @@ description: 대한민국 웹 서비스 코드의 개인정보·보안 요구사
 | `references/code-review-checklist.md` | 보안 코드리뷰 체크리스트 | 실제 diff를 볼 때 |
 | `references/test-case-templates.md` | 테스트 케이스 템플릿 | 9번 출력 항목 작성 |
 | `references/report-template.md` | 출력 형식 | 보고서 작성 |
+| `examples/sample-review.md` | 회원 내보내기 PR 검토 예시 | 보고서의 근거 표기 수준을 맞출 때 |
 
-원문 발췌의 수집일은 2026-10-23입니다. 그 뒤 법령이 바뀌었을 수 있으니, 보고서에 수집일을 밝히고 국가법령정보센터(https://www.law.go.kr/) 최신본 확인을 권합니다. 위 파일에 없는 조문은 기억으로 인용하지 말고 `review-required`로 남깁니다.
+원문 발췌의 수집일은 각 파일 첫 줄에 있습니다(최초 2026-10-23). 가이드 저장소의 `scripts/build-skill-references.mjs`가 국가법령정보센터 Open API로 발췌를 다시 만듭니다. 그 뒤 법령이 바뀌었을 수 있으니, 보고서에 수집일을 밝히고 국가법령정보센터(https://www.law.go.kr/) 최신본 확인을 권합니다. 위 파일에 없는 조문은 기억으로 인용하지 말고 `review-required`로 남깁니다.
 
 ## 검토 절차
 
