@@ -13,6 +13,7 @@
     "validate:content": "node scripts/validate-content.mjs",
     "watch:sources": "node scripts/check-sources.mjs",
     "build:skill-refs": "node scripts/build-skill-references.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "astro": "astro"
   },
   "dependencies": {

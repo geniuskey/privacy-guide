@@ -1,0 +1,30 @@
+name: External link check
+
+# 출처 레지스트리와 문서·Skill의 외부 링크를 주 1회 확인한다. 깨진 링크가 있으면 이슈를 하나 열거나 갱신한다.
+# 외부 사이트 상태에 따라 실패할 수 있으므로 PR CI에는 넣지 않는다.
+on:
+  schedule:
+    - cron: '43 0 * * 1' # 매주 월요일 09:43 KST (출처 변경 감지 뒤)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: 외부 링크 확인
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/check-links.mjs --report=links-report.json --issue
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: links-report
+          path: links-report.json

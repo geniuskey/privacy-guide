@@ -5,7 +5,7 @@ category: case-studies
 status: review-required
 lastVerified: 2026-10-23
 tags: [회원가입, 동의, 처리근거, 아동, 파기, 인증]
-related: [collection-consent/lawful-basis, collection-consent/consent-ui, collection-consent/children, collection-consent/privacy-policy, auth-access/authentication-session, storage-retention/retention-destruction, storage-retention/encryption, sensitive-data/unique-identifiers]
+related: [collection-consent/lawful-basis, collection-consent/consent-ui, collection-consent/marketing-messages, collection-consent/children, collection-consent/privacy-policy, auth-access/authentication-session, storage-retention/retention-destruction, storage-retention/encryption, sensitive-data/unique-identifiers]
 sources: [pipa, pipa-decree, safety-notice, pipc-integrated-guide, pipc-privacy-policy-guide, owasp-asvs-5, network-act]
 legalBasis:
   - source: pipa
@@ -68,9 +68,10 @@ legalBasis:
     summary: 회원가입 필수 항목을 계약 체결·이행 근거로 처리하는 해석, 장기 미이용자 관리 권고. 원문 대조 필요
     status: review-required
   - source: network-act
+    article: 제50조
     kind: law
-    summary: 광고성 정보 전송 시 수신 동의 등 정보통신망법상 별도 요건. 조문 미확인
-    status: review-required
+    summary: 광고성 정보 전송 시 명시적 사전 동의, 야간(21~08시) 별도 동의, 수신거부 처리, 정기적 수신동의 확인
+    status: verified
   - source: owasp-asvs-5
     article: V6 Authentication, V7 Session Management
     kind: standard
@@ -94,7 +95,7 @@ legalBasis:
 | 생년월일(또는 연령 구간) | 만 14세 미만 확인 | 제15조제1항제4호 또는 제2호 검토 | 연령 확인만 필요하면 "14세 이상 여부"만 받는 방안 검토(제16조) |
 | 법정대리인 성명·연락처 | 법정대리인 동의 | 제22조의2제2항 | 동의 확인 전에만 직접 수집 가능한 최소 정보 |
 | 휴대전화번호 | 본인확인·계정 복구 | 서비스 설계에 따라 4호 또는 동의 | 필수로 할 필요가 있는지 먼저 검토 |
-| 마케팅 수신 여부·연락처 | 광고성 정보 발송 | 제15조제1항제1호 + 제22조제1항제7호 구분 동의 | 정보통신망법 별도 요건 `review-required` |
+| 마케팅 수신 여부·연락처 | 광고성 정보 발송 | 제15조제1항제1호 + 제22조제1항제7호 구분 동의 | 정보통신망법 제50조 채널별 수신동의 → [광고성 정보 전송](/collection-consent/marketing-messages/) |
 | 관심사·프로필 사진 | 맞춤 추천 | 제15조제1항제1호(선택 동의) | 거부해도 가입 가능해야 함(제16조제3항, 제22조제5항) |
 | 접속 IP·기기 정보 | 부정 로그인 탐지 | 제15조제1항제6호 검토 | 정당한 이익 판단 기록 필요 → [처리 근거](/collection-consent/lawful-basis/) |
 
@@ -235,8 +236,8 @@ export function planAccountDeletion(userId: string, hasOrders: boolean): Erasure
 - [ ] 법정 보존 데이터는 근거 법령과 만료일을 가진 분리 저장소에 있다 (근거 법령 `review-required`)
 - [ ] 장기 미이용 계정 정책을 법정 의무로 표시하지 않았고, 내부 기준과 기간은 법무 검토를 받았다
 - [ ] 발송 대행사 등 수탁자 목록이 처리방침과 일치한다
-- [ ] 광고성 정보 발송은 정보통신망법 요건을 확인했다 (`review-required`)
+- [ ] 광고성 정보 발송은 채널별 수신동의·야간 동의·수신거부·2년 재확인을 발송 시스템이 강제한다 (정보통신망법 제50조)
 
 ## 공식 원문 링크와 확인일
 
-아래 "근거 구분표"와 "공식 원문 링크"를 참고하세요. 개인정보 보호법·시행령·안전성 확보조치 기준 조문(시행령 제48조의5 삭제 사실 포함)은 2026-10-23에 국가법령정보센터 Open API로 받은 현행 원문과 대조했습니다. 통합 안내서·처리방침 작성지침의 해석과 정보통신망법, 전자상거래 관련 보존 의무는 원문 대조 전이라 `review-required`입니다.
+아래 "근거 구분표"와 "공식 원문 링크"를 참고하세요. 개인정보 보호법·시행령·안전성 확보조치 기준 조문(시행령 제48조의5 삭제 사실 포함)은 2026-10-23에 국가법령정보센터 Open API로 받은 현행 원문과 대조했습니다. 정보통신망법 제50조(광고성 정보)도 같은 날 원문과 대조했습니다. 통합 안내서·처리방침 작성지침의 해석과 전자상거래 관련 보존 의무는 원문 대조 전이라 `review-required`입니다.

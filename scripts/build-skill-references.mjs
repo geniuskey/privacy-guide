@@ -32,6 +32,8 @@ const TARGETS = [
 	{ file: null, query: '통신비밀보호법', articles: ['2', '3'], group: 'related' },
 	{ file: null, query: '근로자참여 및 협력증진에 관한 법률', articles: ['20', '21'], group: 'related' },
 	{ file: null, query: '저작권법', articles: ['7'], group: 'related' },
+	{ file: null, query: '정보통신망 이용촉진 및 정보보호 등에 관한 법률', articles: ['22-2', '50'], group: 'related' },
+	{ file: null, query: '정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령', articles: ['9-2', '61', '62', '62-2', '62-3'], group: 'related' },
 ];
 
 const getJson = async (url) => {

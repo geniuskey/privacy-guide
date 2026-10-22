@@ -21,6 +21,9 @@ description: FastAPI와 TypeScript로 작성한 실행 가능한 개인정보·�
 | 내보내기·삭제 요청 처리 | ✓ | ✓ | [정보주체 권리 API](/app-security/data-subject-rights/) |
 | 외부 LLM 전송 데이터 필터링 | ✓ | ✓ | [LLM API 연동](/ai-llm/llm-api-integration/) |
 | 세션·인증정보 보안 | ✓ | ✓ | [인증·세션](/auth-access/authentication-session/) |
+| 필드 암호화·키 순환·블라인드 인덱스 | ✓ | ✓ | [암호화](/storage-retention/encryption/) |
+| 광고성 정보 수신동의·야간 전송 게이트 | ✓ | ✓ | [광고성 정보 전송](/collection-consent/marketing-messages/) |
+| 운영 덤프 변환·픽스처 개인정보 검사 | ✓ | ✓ | [개발·테스트 환경](/app-security/dev-test-data/) |
 
 ## 실행
 

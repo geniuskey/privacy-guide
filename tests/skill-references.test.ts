@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import { parse } from 'yaml';
 import { describe, expect, it } from 'vitest';
 import sources from '../data/sources.json';
 import { ACCESS_CONTROLS, BASES, DATA_ITEMS, DEFAULT_INPUT, evaluate, type SelfCheckInput } from '../src/lib/selfcheck/rules';
@@ -73,5 +74,42 @@ describe('자가진단 결과의 조문 인용', () => {
 			}
 		}
 		expect([...missing]).toEqual([]);
+	});
+});
+
+describe('정보통신망법 인용', () => {
+	// 관련 법령 발췌를 "## 법령명 (...)" 단위로 나눈다
+	const related = read('related-laws-excerpts.md');
+	const section = (title: string) => {
+		const start = related.indexOf(`## ${title} (`);
+		if (start < 0) return '';
+		const next = related.indexOf('\n## ', start + 1);
+		return related.slice(start, next < 0 ? undefined : next);
+	};
+	const NETWORK: Record<string, Set<string>> = {
+		'network-act': available(section('정보통신망 이용촉진 및 정보보호 등에 관한 법률')),
+		'network-decree': available(section('정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령')),
+	};
+
+	it('발췌 헤더의 공포번호가 data/sources.json과 같다', () => {
+		expect(section('정보통신망 이용촉진 및 정보보호 등에 관한 법률')).toContain(`(${version('network-act')},`);
+		expect(section('정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령')).toContain(`(${version('network-decree')},`);
+	});
+
+	it('문서가 verified로 표시한 정보통신망법·시행령 조문이 발췌에 있다', () => {
+		const DOCS = new URL('../src/content/docs/', import.meta.url);
+		const files = readdirSync(DOCS, { recursive: true, encoding: 'utf8' }).filter((f) => /\.mdx?$/.test(f));
+		const missing: string[] = [];
+		for (const f of files) {
+			const fm = readFileSync(new URL(f, DOCS), 'utf8').match(/^---\n([\s\S]*?)\n---/);
+			if (!fm) continue;
+			for (const b of (parse(fm[1]!)?.legalBasis ?? []) as { source: string; article?: string; status: string }[]) {
+				const have = NETWORK[b.source];
+				if (!have || b.status !== 'verified') continue;
+				if (!b.article) missing.push(`${f}: ${b.source} 조문 번호 없음`);
+				for (const k of cited(b.article ?? '')) if (!have.has(k)) missing.push(`${f}: ${b.source} 제${k.replace('-', '조의')}`);
+			}
+		}
+		expect(missing).toEqual([]);
 	});
 });

@@ -5,7 +5,7 @@ category: collection-consent
 status: review-required
 lastVerified: 2026-10-23
 tags: [동의, 동의 UI, 마케팅 동의, 동의 기록, 회원가입, 처리근거]
-related: [collection-consent/lawful-basis, collection-consent/children, collection-consent/privacy-policy, laws/related-laws, app-security/data-subject-rights, case-studies/signup-service]
+related: [collection-consent/marketing-messages, collection-consent/lawful-basis, collection-consent/children, collection-consent/privacy-policy, laws/related-laws, app-security/data-subject-rights, case-studies/signup-service]
 sources: [pipa, pipa-decree, pipc-integrated-guide, network-act]
 legalBasis:
   - source: pipa
@@ -44,9 +44,10 @@ legalBasis:
     summary: 명확히 표시할 중요한 내용(홍보·판매 권유 연락 사실, 민감정보, 여권·운전면허·외국인등록번호, 보유기간, 제공받는 자와 그 목적)과 선택 가능 사실 표시, 제22조제3항의 서면등의 방법
     status: verified
   - source: network-act
+    article: 제50조제1항, 제3항
     kind: law
-    summary: 광고성 정보 전송 동의는 정보통신망법에 별도 규정이 있을 수 있음 — 조문 확인 필요
-    status: review-required
+    summary: 광고성 정보 전송에는 개인정보 처리 동의와 별도로 수신자의 명시적 사전 동의가 필요하고, 오후 9시~오전 8시 전송은 별도 동의 필요(전자우편 예외, 시행령 제61조제2항)
+    status: verified
   - source: pipc-integrated-guide
     kind: guide
     summary: 동의 화면 구성 예시와 "필수/선택" 표기 관행에 대한 해석(원문 쪽수 확인 필요)
@@ -87,7 +88,7 @@ legalBasis:
 
 ### 광고 전송은 별도 법률도 확인
 
-제22조제1항제7호는 홍보·판매 권유를 위한 **개인정보 처리**에 대한 동의입니다. 이메일·문자·푸시로 광고를 **전송**하는 행위에는 정보통신망법 규정이 따로 적용될 수 있습니다(조문 원문 미확인, `review-required`). → [관련 법률](/laws/related-laws/)
+제22조제1항제7호는 홍보·판매 권유를 위한 **개인정보 처리**에 대한 동의입니다. 이메일·문자·푸시로 광고를 **전송**하는 행위에는 정보통신망법 제50조가 따로 적용됩니다. 채널별 명시적 사전 동의, 야간(21~08시) 별도 동의, 수신거부 처리, 2년마다 동의 확인이 필요합니다. → [광고성 정보 전송과 마케팅 수신동의](/collection-consent/marketing-messages/)
 
 ## 실제 법적 근거
 
@@ -236,8 +237,8 @@ export function canSignUp(form: { email: string; password: string }): boolean {
 - [ ] 동의 이벤트에 고지문 버전, 방법, 시각, 주체(본인/법정대리인)가 저장된다
 - [ ] 고지문 변경 시 영향 받는 사용자를 찾아 재동의를 받는 절차가 있다
 - [ ] 동의 철회가 동의만큼 쉽게 가능하다
-- [ ] 광고 전송 채널별 수신 동의 요건은 정보통신망법 확인을 요청했다 (`review-required`)
+- [ ] 광고 전송 수신동의를 채널별로 받고, 야간 수신동의를 따로 받는다 (정보통신망법 제50조제1항·제3항)
 
 ## 공식 원문 링크와 확인일
 
-아래 "근거 구분표"와 "공식 원문 링크"를 참고하세요. 법률 제15조·제16조·제22조와 시행령 제17조는 2026-10-23에 국가법령정보센터 Open API 현행본과 대조했습니다. 제22조제2항의 표시 방법 고시, 정보통신망법의 광고 전송 규정, 안내서의 화면 예시는 원문 대조 전이라 `review-required`입니다.
+아래 "근거 구분표"와 "공식 원문 링크"를 참고하세요. 법률 제15조·제16조·제22조와 시행령 제17조는 2026-10-23에 국가법령정보센터 Open API 현행본과 대조했습니다. 정보통신망법 제50조도 같은 날 현행 원문과 대조했습니다. 제22조제2항의 표시 방법 고시와 안내서의 화면 예시는 원문 대조 전이라 `review-required`입니다.

@@ -9,3 +9,6 @@ export * from "./retention.js";
 export * from "./dataSubjectRights.js";
 export * from "./llmFilter.js";
 export * from "./session.js";
+export * from "./fieldEncryption.js";
+export * from "./marketingConsent.js";
+export * from "./nonprodData.js";

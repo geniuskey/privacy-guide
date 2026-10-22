@@ -20,7 +20,7 @@
 ├─ examples/                # FastAPI·TypeScript 구현 예제와 테스트
 ├─ skills/kr-privacy-review # AI 개발 에이전트용 Skill (원문 발췌 포함)
 ├─ scripts/                 # 콘텐츠 검사, 출처 변경 감지, 이슈 생성
-└─ .github/workflows/       # 배포, CI, 출처 변경 감지
+└─ .github/workflows/       # 배포, CI, 출처 변경 감지, 외부 링크 점검
 ```
 
 ## 개발
@@ -38,6 +38,9 @@ npm run build             # 정적 사이트 + Pagefind 검색 인덱스
 
 # 공식 출처 변경 감지 (국가법령정보 공동활용 인증키 필요)
 LAW_OC=<인증키> npm run watch:sources
+
+# 외부 링크 점검 (출처 레지스트리·문서·Skill)
+npm run check:links
 ```
 
 ## 배포

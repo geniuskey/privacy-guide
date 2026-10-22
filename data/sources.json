@@ -272,7 +272,7 @@
       "url": "https://www.law.go.kr/법령/정보통신망이용촉진및정보보호등에관한법률",
       "lastChecked": "2026-10-23",
       "verification": "verified",
-      "notes": "버전은 Open API로 확인. 개별 조문은 이 프로젝트에서 아직 대조하지 않았으므로 인용 시 review-required.",
+      "notes": "버전은 Open API로 확인. 제22조의2(접근권한에 대한 동의)와 제50조(영리목적의 광고성 정보 전송 제한)는 2026-10-23 국가법령정보센터 현행 원문과 대조(references/law/related-laws-excerpts.md). 그 밖의 조문은 인용 시 review-required.",
       "watch": {
         "type": "law-api",
         "target": "law",
@@ -280,6 +280,25 @@
         "mst": "290001"
       },
       "version": "법률 제21988호",
+      "promulgatedAt": "2026-09-29",
+      "effectiveAt": "2026-10-02"
+    },
+    {
+      "id": "network-decree",
+      "title": "정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령",
+      "kind": "decree",
+      "publisher": "소관: 과학기술정보통신부·방송미디어통신위원회",
+      "url": "https://www.law.go.kr/법령/정보통신망이용촉진및정보보호등에관한법률시행령",
+      "lastChecked": "2026-10-23",
+      "verification": "verified",
+      "notes": "제9조의2(접근권한의 범위 등), 제61조(광고성 정보 전송기준), 제62조, 제62조의2(수신동의 등 처리 결과의 통지), 제62조의3(수신동의 여부의 확인)을 2026-10-23 국가법령정보센터 현행 원문과 대조. 별표 6(명시사항과 방법)은 원문 대조 전이므로 review-required.",
+      "watch": {
+        "type": "law-api",
+        "target": "law",
+        "query": "정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령",
+        "mst": "290483"
+      },
+      "version": "대통령령 제36728호",
       "promulgatedAt": "2026-09-29",
       "effectiveAt": "2026-10-02"
     },

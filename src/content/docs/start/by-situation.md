@@ -14,6 +14,7 @@ description: 지금 만드는 기능에서 출발해 읽어야 할 문서를 찾
 | 본인확인·주민등록번호 | [고유식별정보](/sensitive-data/unique-identifiers/) | [암호화](/storage-retention/encryption/) |
 | 건강·생체 정보 | [민감정보 구분](/sensitive-data/sensitive-vs-personal/) | [암호화](/storage-retention/encryption/) |
 | 마이페이지 조회 API | [객체 단위 권한](/auth-access/object-level-authorization/) | [최소 필드 응답](/app-security/minimal-response/) |
+| 마케팅 문자·이메일·푸시 발송 | [광고성 정보 전송](/collection-consent/marketing-messages/) | [동의 UI](/collection-consent/consent-ui/) |
 | 탈퇴·계정 삭제 | [정보주체 권리 API](/app-security/data-subject-rights/) | [보존기간과 파기](/storage-retention/retention-destruction/) |
 | 처리방침 작성 | [개인정보 처리방침](/collection-consent/privacy-policy/) | [국외 이전](/data-sharing/cross-border-transfer/) |
 | 해외 클라우드·SaaS 사용 | [제3자 제공과 위탁](/data-sharing/provision-vs-outsourcing/) | [국외 이전](/data-sharing/cross-border-transfer/) |
@@ -35,5 +36,6 @@ description: 지금 만드는 기능에서 출발해 읽어야 할 문서를 찾
 | 사용자 데이터로 학습·RAG | [AI 학습 데이터](/ai-llm/ai-training-data/) | [가명정보](/sensitive-data/pseudonymization/) |
 | 자동 심사·추천·점수화 | [자동화된 결정](/ai-llm/automated-decisions/) | |
 | 로그·APM·에러 트래커 | [로그 마스킹](/app-security/log-masking/) | [접속기록](/storage-retention/access-logs/) |
+| 스테이징·테스트 데이터 준비 | [개발·테스트 환경](/app-security/dev-test-data/) | [가명·익명 처리](/sensitive-data/pseudonymization/), [암호화](/storage-retention/encryption/) |
 | 보안 사고 대응 | [유출등 대응](/storage-retention/breach-response/) | [최근 개정](/laws/recent-amendments/) |
 | 보안 요구사항 정리 | [OWASP ASVS 매핑](/app-security/owasp-asvs-mapping/) | [코드리뷰 체크리스트](/tools/code-review-checklist/) |

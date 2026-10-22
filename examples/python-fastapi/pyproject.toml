@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "한국 개인정보보호 개발 가이드 - FastAPI 보안/프라이버시 구현 예제 (교육용)"
 requires-python = ">=3.12"
 dependencies = [
+    "cryptography>=44",
     "fastapi>=0.115",
     "pydantic>=2.7",
 ]

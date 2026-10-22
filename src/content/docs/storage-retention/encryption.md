@@ -184,7 +184,7 @@ export function rotate(row: Row, keys: Map<string, Buffer>, newKeyId: string): R
 }
 ```
 
-전체 실행 예제와 테스트는 [구현 예제](/tools/examples/)를 참고하세요.
+필드 단위 AES-256-GCM 암호화(AAD로 행·컬럼 바인딩), 키 ID를 포함한 암호문 형식과 배치 재암호화, HMAC 블라인드 인덱스 검색의 실행 예제와 테스트는 `examples/python-fastapi/src/kr_privacy_examples/field_encryption.py`, `examples/typescript/src/fieldEncryption.ts`에 있습니다. → [구현 예제](/tools/examples/)
 
 ## 개발 체크리스트
 
