@@ -3,6 +3,7 @@
 // 법령 개정 이슈를 처리하는 PR에서 실행한다. 사용법: LAW_OC=<인증키> node scripts/build-skill-references.mjs
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { asArray, flatText as flat } from './lib/law-text.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const OUT = join(ROOT, 'skills/kr-privacy-review/references/law');
@@ -33,14 +34,6 @@ const TARGETS = [
 	{ file: null, query: '저작권법', articles: ['7'], group: 'related' },
 ];
 
-const asArray = (x) => (x == null ? [] : Array.isArray(x) ? x : [x]);
-const flat = (x) => {
-	if (x == null) return '';
-	if (typeof x === 'string') return x;
-	if (Array.isArray(x)) return x.map(flat).join('\n');
-	if (typeof x === 'object') return ['조문내용', '항내용', '호내용', '목내용', '항', '호', '목'].filter((k) => k in x).map((k) => flat(x[k])).filter(Boolean).join('\n');
-	return String(x);
-};
 const getJson = async (url) => {
 	const res = await fetch(url, { headers: { 'User-Agent': UA } });
 	if (!res.ok) throw new Error(`${res.status}`);

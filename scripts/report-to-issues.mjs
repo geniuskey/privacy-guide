@@ -3,6 +3,7 @@
 // 사용법: GH_TOKEN=... node scripts/report-to-issues.mjs source-report.json [--dry-run]
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { articleLabel } from './lib/law-text.mjs';
 
 const [file] = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const dryRun = process.argv.includes('--dry-run');
@@ -24,7 +25,7 @@ const ensureLabels = () => {
 
 const docsTable = (docs) =>
 	docs.length
-		? ['| 문서 | 변경 조문 인용 |', '| --- | --- |', ...docs.map((d) => `| \`${d.slug}\` | ${d.citedChangedArticles.length ? d.citedChangedArticles.map((a) => `제${a.replace('-', '조의')}${a.includes('-') ? '' : '조'}`).join(', ') : '-'} |`)].join('\n')
+		? ['| 문서 | 변경 조문 인용 |', '| --- | --- |', ...docs.map((d) => `| \`${d.slug}\` | ${d.citedChangedArticles.length ? d.citedChangedArticles.map(articleLabel).join(', ') : '-'} |`)].join('\n')
 		: '영향 문서 없음';
 
 const REVIEW_STEPS = `
@@ -43,8 +44,9 @@ for (const c of report.changes) {
 			`**${c.title}**의 ${c.kind === 'text' ? '조문 텍스트' : '버전'} 변경을 감지했습니다 (${report.checkedAt}).`,
 			'',
 			`- 이전: ${c.from.number ?? '-'} ${c.from.effectiveAt ? `(시행 ${c.from.effectiveAt})` : ''}`,
-			`- 현재: ${c.to.number} ${c.to.effectiveAt ? `(시행 ${c.to.effectiveAt})` : ''}`,
+			`- 현재: ${c.to.number} ${c.to.effectiveAt ? `(${c.kind === 'guide' ? '게시' : '시행'} ${c.to.effectiveAt})` : ''}`,
 			c.changedArticles.length ? `- 변경 조문: ${c.changedArticles.join(', ')}` : '',
+			c.url ? `- 게시글: ${c.url}` : '',
 			'',
 			'### 검토가 필요한 문서',
 			docsTable(c.affectedDocs),
@@ -62,7 +64,7 @@ for (const m of report.manualDue) {
 	issues.push({
 		title: `[정기 확인] ${m.title}`,
 		body: [
-			`공식 API가 없어 자동 비교하지 않는 출처입니다. 마지막 확인일 ${m.lastChecked}(${m.ageDays}일 전).`,
+			m.reason ? `${m.reason}. 마지막 확인일 ${m.lastChecked}.` : `공식 API가 없어 자동 비교하지 않는 출처입니다. 마지막 확인일 ${m.lastChecked}(${m.ageDays}일 전).`,
 			'',
 			`- 발행기관 페이지: ${m.url}`,
 			'- 최신판 발행 여부, 원문 URL, 버전을 확인하고 `data/sources.json`의 `lastChecked`를 갱신하세요.',

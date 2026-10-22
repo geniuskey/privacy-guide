@@ -8,10 +8,10 @@
 // 사용법:
 //   LAW_OC=<open.law.go.kr 인증키> node scripts/check-sources.mjs [--report=report.json] [--update-snapshots] [--today=YYYY-MM-DD]
 // 종료 코드는 항상 0이며, 결과는 report JSON과 표준출력 요약으로 전달한다 (이슈 생성은 워크플로가 담당).
-import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { parse } from 'yaml';
+import { articleHash as hash, articleKeys, asArray, diffArticles, flatText, latestCurrentGuide, parseBoardRows } from './lib/law-text.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const SNAP_DIR = join(ROOT, 'data/law-snapshots');
@@ -42,8 +42,6 @@ const docRefs = walk(DOCS).map((file) => {
 		articles: (fm.legalBasis ?? []).map((b) => ({ source: b.source, article: b.article ?? '' })),
 	};
 });
-// "제28조의8제1항" → "28-8", "제15조제1항, 제22조" → ["15", "22"]
-export const articleKeys = (text) => [...text.matchAll(/제(\d+)조(?:의(\d+))?/g)].map((m) => (m[2] ? `${m[1]}-${m[2]}` : m[1]));
 const docsFor = (sourceId, changedArticles) =>
 	docRefs
 		.filter((d) => d.sources.has(sourceId))
@@ -60,18 +58,6 @@ async function getJson(url) {
 	if (!res.ok) throw new Error(`${res.status} ${url.replace(OC, '***')}`);
 	return res.json();
 }
-const asArray = (x) => (x == null ? [] : Array.isArray(x) ? x : [x]);
-const flatText = (x) => {
-	if (x == null) return '';
-	if (typeof x === 'string') return x;
-	if (Array.isArray(x)) return x.map(flatText).join('\n');
-	if (typeof x === 'object') return ['조문내용', '항내용', '호내용', '목내용', '항', '호', '목'].filter((k) => k in x).map((k) => flatText(x[k])).join('\n');
-	return String(x);
-};
-// 공백·개정 표기(<개정 2023.3.14>) 차이로 인한 오탐을 줄이기 위해 정규화 후 해시
-const normalize = (s) => s.replace(/<(개정|신설|전문개정|본조신설)[^>]*>/g, '').replace(/\s+/g, '');
-const hash = (s) => createHash('sha256').update(normalize(s)).digest('hex').slice(0, 16);
-
 async function lawSnapshot(watch) {
 	const search = await getJson(`${API}/lawSearch.do?OC=${OC}&target=law&type=JSON&query=${encodeURIComponent(watch.query)}`);
 	const hits = asArray(search.LawSearch?.law).filter((l) => l.법령명한글 === watch.query);
@@ -110,12 +96,6 @@ async function admrulSnapshot(watch) {
 	};
 }
 
-function diffArticles(prev, next) {
-	const changed = [];
-	for (const [k, v] of Object.entries(next)) if (!prev[k] || prev[k].hash !== v.hash) changed.push(k);
-	for (const k of Object.keys(prev)) if (!next[k]) changed.push(k);
-	return changed;
-}
 
 // ---- 실행 ----
 const report = { checkedAt: today.toISOString().slice(0, 10), changes: [], upcoming: [], manualDue: [], errors: [], skipped: [] };
@@ -164,6 +144,25 @@ for (const s of registry) {
 			const latest = versions[0]?.join('.');
 			if (latest && s.version && latest !== s.version) {
 				report.changes.push({ id: s.id, title: s.title, kind: 'release', from: { number: s.version }, to: { number: latest }, changedArticles: [], affectedDocs: docsFor(s.id, null) });
+			}
+		} else if (w.type === 'pipc-board') {
+			// 공식 API가 없는 안내서: 게시판 검색 결과 1페이지만 읽어 [현재 안내서] 최신 글의 nttId를 비교한다
+			await new Promise((r) => setTimeout(r, 1500)); // 요청 간격
+			const url = `https://www.pipc.go.kr/np/cop/bbs/selectBoardList.do?bbsId=${w.bbsId}&mCode=D010030000&searchCnd=0&searchWrd=${encodeURIComponent(w.search)}`;
+			const res = await fetch(url, { headers: { 'User-Agent': UA } });
+			if (!res.ok) throw new Error(`PIPC ${res.status}`);
+			const rows = parseBoardRows(await res.text());
+			if (rows.length === 0) throw new Error('게시판 목록을 해석하지 못함 (구조 변경 가능성)');
+			const latest = latestCurrentGuide(rows, w.match);
+			if (latest && latest.nttId !== w.nttId) {
+				report.changes.push({
+					id: s.id, title: s.title, kind: 'guide',
+					from: { number: s.version }, to: { number: latest.title, effectiveAt: latest.date },
+					url: `https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=${w.bbsId}&mCode=D010030000&nttId=${latest.nttId}`,
+					changedArticles: [], affectedDocs: docsFor(s.id, null),
+				});
+			} else if (!latest && s.current !== false) {
+				report.manualDue.push({ id: s.id, title: s.title, lastChecked: s.lastChecked, ageDays: 0, url: s.url, reason: '게시판 검색에서 [현재 안내서]를 찾지 못함 (과거 안내서로 바뀌었을 수 있음)', affectedDocs: docsFor(s.id, null) });
 			}
 		} else if (w.type === 'manual') {
 			const age = Math.floor((today - new Date(s.lastChecked)) / 86400000);

@@ -6,7 +6,7 @@ status: review-required
 lastVerified: 2026-10-23
 tags: [가명정보, 익명정보, 가명처리, 재식별, 데이터 분석, 데이터 분류]
 related: [laws/key-definitions, sensitive-data/sensitive-vs-personal, ai-llm/ai-training-data, data-sharing/public-data-and-downloads, storage-retention/retention-destruction, collection-consent/privacy-policy]
-sources: [pipa, pipa-decree, safety-notice, pipc-integrated-guide]
+sources: [pipa, pipa-decree, safety-notice, pipc-integrated-guide, pipc-pseudonym-guide]
 legalBasis:
   - source: pipa
     article: 제2조제1호다목, 제1호의2

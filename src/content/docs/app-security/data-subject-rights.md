@@ -6,7 +6,7 @@ status: review-required
 lastVerified: 2026-10-23
 tags: [정보주체권리, 열람, 삭제, 처리정지, 전송요구, 회원탈퇴]
 related: [storage-retention/retention-destruction, collection-consent/consent-ui, ai-llm/automated-decisions, auth-access/authentication-session]
-sources: [pipa, pipa-decree, pipc-integrated-guide]
+sources: [pipa, pipa-decree, pipc-integrated-guide, pipc-portability-guide]
 legalBasis:
   - source: pipa
     article: 제35조

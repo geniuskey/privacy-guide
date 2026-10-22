@@ -53,6 +53,8 @@ export interface Source {
 	effectiveAt?: string;
 	lastChecked: string;
 	verification: 'verified' | 'review-required';
+	/** false: 발행기관이 과거 판으로 분류한 자료 */
+	current?: boolean;
 	notes?: string;
 }
 

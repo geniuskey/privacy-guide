@@ -9,7 +9,7 @@ import { SOURCES } from '../../../lib/content-model';
 
 export const KIND = { law: '법률', decree: '시행령', notice: '고시', guide: '안내서', standard: '기술 표준', portal: '포털' };
 
-모든 문서의 근거는 [`data/sources.json`](https://github.com/geniuskey/privacy-guide/blob/main/data/sources.json)의 id를 참조합니다. **원문 확인**은 공식 원문(국가법령정보센터 Open API 포함)으로 버전을 직접 확인했다는 뜻이고, **확인 필요**는 발행 사실·버전·원문 URL을 아직 공식 원문으로 확인하지 못했다는 뜻입니다.
+모든 문서의 근거는 [`data/sources.json`](https://github.com/geniuskey/privacy-guide/blob/main/data/sources.json)의 id를 참조합니다. **원문 확인**은 공식 원문(국가법령정보센터 Open API 포함)으로 버전을 직접 확인했다는 뜻이고, **확인 필요**는 발행 사실·버전·원문 URL을 아직 공식 원문으로 확인하지 못했다는 뜻입니다. 행정기관 안내서는 개인정보보호위원회 안내서 게시판에서 게시 버전과 URL을 확인했으며, 안내서 **본문 내용의 인용**은 각 문서의 근거 구분표에 표시된 상태(대부분 `review-required`)를 따릅니다.
 
 <div class="table-wrap">
 <table>
@@ -25,7 +25,7 @@ export const KIND = { law: '법률', decree: '시행령', notice: '고시', guid
 				<td>{s.promulgatedAt ?? '-'}</td>
 				<td>{s.effectiveAt ?? '-'}</td>
 				<td>{s.lastChecked}</td>
-				<td>{s.verification === 'verified' ? '원문 확인' : <span class="badge badge-review-required">확인 필요</span>}</td>
+				<td>{s.verification === 'verified' ? '원문 확인' : <span class="badge badge-review-required">확인 필요</span>}{s.current === false && <><br /><span class="badge badge-review-required">과거 안내서</span></>}</td>
 			</tr>
 		))}
 	</tbody>
