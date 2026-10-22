@@ -1,0 +1,37 @@
+---
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import { STATUS_LABEL, CATEGORIES } from '../../lib/content-model';
+
+const { entry } = Astro.locals.starlightRoute;
+const { status, lastVerified, reviewedBy, reviewedAt, category } = entry.data;
+const fmt = (d?: Date) => d?.toISOString().slice(0, 10);
+const categoryLabel = CATEGORIES.find((c) => c.id === category)?.label;
+---
+
+<Default />
+{
+	status && (
+		<div class="doc-meta" data-status={status}>
+			<span class={`badge badge-${status}`}>{STATUS_LABEL[status]}</span>
+			{categoryLabel && <span class="meta-item">{categoryLabel}</span>}
+			{lastVerified && (
+				<span class="meta-item">
+					공식 원문 확인일 <time datetime={fmt(lastVerified)}>{fmt(lastVerified)}</time>
+				</span>
+			)}
+			{reviewedBy && reviewedAt && (
+				<span class="meta-item">
+					검토 {reviewedBy} · {fmt(reviewedAt)}
+				</span>
+			)}
+		</div>
+	)
+}
+{
+	status && status !== 'reviewed' && (
+		<p class="doc-meta-note">
+			이 문서는 법률 전문가의 검토를 거치지 않았습니다. 법적 판단의 근거로 사용하기 전에 아래 공식 원문을 직접 확인하고,
+			필요하면 사내 법무·개인정보 보호책임자와 상의하세요.
+		</p>
+	)
+}

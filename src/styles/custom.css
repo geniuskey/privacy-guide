@@ -1,0 +1,47 @@
+:root {
+	--sl-font: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
+	--sl-color-accent-low: #0f1e3d;
+	--sl-color-accent: #3b82f6;
+	--sl-color-accent-high: #bfdbfe;
+	--pg-warn-bg: #3a2a07;
+	--pg-warn-fg: #fcd34d;
+	--pg-ok-bg: #0b3320;
+	--pg-ok-fg: #6ee7b7;
+	--pg-draft-bg: #2a2a2a;
+	--pg-draft-fg: #d4d4d4;
+	--pg-binding: #f87171;
+	--pg-advisory: #93c5fd;
+}
+:root[data-theme='light'] {
+	--sl-color-accent-low: #dbeafe;
+	--sl-color-accent: #1d4ed8;
+	--sl-color-accent-high: #1e3a8a;
+	--pg-warn-bg: #fef3c7;
+	--pg-warn-fg: #92400e;
+	--pg-ok-bg: #d1fae5;
+	--pg-ok-fg: #065f46;
+	--pg-draft-bg: #f1f5f9;
+	--pg-draft-fg: #334155;
+	--pg-binding: #b91c1c;
+	--pg-advisory: #1d4ed8;
+}
+
+.sl-markdown-content { word-break: keep-all; overflow-wrap: anywhere; }
+
+.doc-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: 0.75rem; font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+.doc-meta-note { margin-top: 0.75rem; padding: 0.6rem 0.9rem; border-left: 3px solid var(--pg-warn-fg); background: var(--pg-warn-bg); color: var(--sl-color-white); font-size: var(--sl-text-sm); border-radius: 0.25rem; }
+.badge { display: inline-block; padding: 0.1rem 0.55rem; border-radius: 999px; font-size: var(--sl-text-xs); font-weight: 600; line-height: 1.6; white-space: nowrap; }
+.badge-review-required { background: var(--pg-warn-bg); color: var(--pg-warn-fg); }
+.badge-reviewed { background: var(--pg-ok-bg); color: var(--pg-ok-fg); }
+.badge-draft { background: var(--pg-draft-bg); color: var(--pg-draft-fg); }
+
+.doc-appendix { margin-top: 3rem; border-top: 1px solid var(--sl-color-hairline); padding-top: 1rem; }
+.doc-appendix h2 { font-size: var(--sl-text-h3); }
+.appendix-hint { font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+.table-wrap { overflow-x: auto; }
+.doc-appendix table { width: 100%; border-collapse: collapse; font-size: var(--sl-text-sm); }
+.doc-appendix th, .doc-appendix td { border-bottom: 1px solid var(--sl-color-hairline); padding: 0.45rem 0.5rem; text-align: left; vertical-align: top; }
+.kind { font-weight: 600; white-space: nowrap; }
+.kind-binding { color: var(--pg-binding); }
+.kind-advisory { color: var(--pg-advisory); }
+.source-list li { margin: 0.25rem 0; }

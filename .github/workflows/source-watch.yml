@@ -1,0 +1,37 @@
+name: Official source watch
+
+# 공식 법령·고시·표준의 버전 변경을 감지해 검토 이슈를 만든다.
+# 콘텐츠와 스냅샷은 자동으로 바꾸지 않는다. 검토자가 이슈를 확인하고 PR로 갱신한다.
+on:
+  schedule:
+    - cron: '17 0 * * 1' # 매주 월요일 09:17 KST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: 변경 감지
+        env:
+          # 국가법령정보 공동활용(open.law.go.kr)에서 발급받은 인증키(OC). 없으면 법령 확인은 건너뛴다.
+          LAW_OC: ${{ secrets.LAW_OC }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/check-sources.mjs --report=source-report.json
+      - name: 검토 이슈 작성
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/report-to-issues.mjs source-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-report
+          path: source-report.json

@@ -1,0 +1,50 @@
+---
+title: Korea Privacy Dev Guide
+description: 한국에서 웹 서비스를 만드는 개발자를 위한 개인정보 보호·정보보안 실무 가이드
+template: splash
+hero:
+  tagline: 개인정보 보호법, 접근권한, 민감정보, 데이터 공개, 생성형 AI 연동까지. 기능을 만들 때 바로 참고할 수 있는 근거 중심 기술문서와 자가진단 도구입니다.
+  actions:
+    - text: 자가진단 시작
+      link: self-check/
+      icon: right-arrow
+    - text: 가이드 사용법
+      link: start/how-to-use/
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+:::caution[법률 자문이 아닙니다]
+이 사이트는 공개된 법령과 행정기관 안내서를 개발 관점에서 정리한 오픈소스 문서입니다. 법률 자문이나 적합성 인증이 아니며, 문서마다 표시된 **검토 상태**와 **공식 원문 확인일**을 확인하세요.
+:::
+
+<CardGrid>
+	<Card title="근거를 구분해서 씁니다" icon="document">
+		법률·시행령·고시(의무), 행정기관 안내서(해석·권고), OWASP 등 기술 표준(권고), 프로젝트 권장사항을 문서마다 따로 표시합니다.
+	</Card>
+	<Card title="코드로 확인합니다" icon="seti:python">
+		FastAPI와 TypeScript로 RBAC, 객체 단위 권한, 로그 마스킹, 보존기간 파기, LLM 전송 필터링 예제를 테스트와 함께 제공합니다.
+	</Card>
+	<Card title="입력값은 브라우저에만 있습니다" icon="approve-check">
+		자가진단은 브라우저 안에서만 계산합니다. 입력값을 서버로 보내거나 저장하지 않습니다.
+	</Card>
+	<Card title="AI 에이전트에서도 씁니다" icon="rocket">
+		Claude Code, Codex 같은 개발 에이전트가 PR을 검토할 때 쓸 수 있는 `kr-privacy-review` Skill을 함께 배포합니다.
+	</Card>
+</CardGrid>
+
+## 주제별로 보기
+
+<CardGrid>
+	<LinkCard title="1. 개인정보 보호법과 관련 법령" href="/laws/pipa-overview/" />
+	<LinkCard title="2. 수집·이용 및 동의" href="/collection-consent/lawful-basis/" />
+	<LinkCard title="3. 개인정보와 민감정보" href="/sensitive-data/sensitive-vs-personal/" />
+	<LinkCard title="4. 인증 및 접근권한" href="/auth-access/access-control/" />
+	<LinkCard title="5. 사내 관리자와 직원 정보" href="/internal-admin/admin-vs-data-access/" />
+	<LinkCard title="6. 공개·공유·제3자 제공" href="/data-sharing/provision-vs-outsourcing/" />
+	<LinkCard title="7. 저장·암호화·로그·파기" href="/storage-retention/encryption/" />
+	<LinkCard title="8. API·DB·웹 보안" href="/app-security/minimal-response/" />
+	<LinkCard title="9. 생성형 AI·LLM" href="/ai-llm/llm-api-integration/" />
+	<LinkCard title="10. 프로젝트 사례" href="/case-studies/signup-service/" />
+</CardGrid>

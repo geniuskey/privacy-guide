@@ -1,0 +1,28 @@
+[project]
+name = "kr-privacy-examples"
+version = "0.1.0"
+description = "한국 개인정보보호 개발 가이드 - FastAPI 보안/프라이버시 구현 예제 (교육용)"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "pydantic>=2.7",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    # 최신 Starlette TestClient 는 httpx2 를 권장한다(없으면 httpx 로 동작하며 경고 출력)
+    "httpx2>=2.16.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kr_privacy_examples"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

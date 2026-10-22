@@ -1,0 +1,94 @@
+---
+import Default from '@astrojs/starlight/components/MarkdownContent.astro';
+import { getCollection } from 'astro:content';
+import { BASIS_KIND_LABEL, isBinding, getSource } from '../../lib/content-model';
+import { relatedDocs } from '../../lib/related';
+
+const { entry } = Astro.locals.starlightRoute;
+const { status } = entry.data;
+const legalBasis = entry.data.legalBasis ?? [];
+const sources = entry.data.sources ?? [];
+const related = entry.data.related ?? [];
+const tags = entry.data.tags ?? [];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const allDocs = status ? await getCollection('docs') : [];
+const relatedList = status
+	? relatedDocs(
+			{ id: entry.id, related, tags, category: entry.data.category },
+			allDocs.map((d) => ({ id: d.id, title: d.data.title, related: d.data.related ?? [], tags: d.data.tags ?? [], category: d.data.category })),
+		)
+	: [];
+
+const sourceIds = [...new Set([...legalBasis.map((b) => b.source), ...sources])];
+const sourceList = sourceIds.map((id) => ({ id, source: getSource(id) }));
+---
+
+<Default><slot /></Default>
+{
+	legalBasis.length > 0 && (
+		<section class="doc-appendix" aria-labelledby="legal-basis-heading">
+			<h2 id="legal-basis-heading">근거 구분표</h2>
+			<p class="appendix-hint">
+				<strong>법률·시행령·고시</strong>는 법적 의무, <strong>안내서</strong>는 행정기관 해석·권고, <strong>기술 표준</strong>과{' '}
+				<strong>프로젝트 권장사항</strong>은 법적 의무가 아닙니다.
+			</p>
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr><th>구분</th><th>출처·조항</th><th>내용</th><th>확인 상태</th></tr>
+					</thead>
+					<tbody>
+						{legalBasis.map((b) => {
+							const s = getSource(b.source);
+							return (
+								<tr>
+									<td><span class={`kind kind-${isBinding(b.kind) ? 'binding' : 'advisory'}`}>{BASIS_KIND_LABEL[b.kind]}</span></td>
+									<td>{s ? <a href={s.url} rel="noopener noreferrer">{s.title}</a> : b.source} {b.article}</td>
+									<td>{b.summary}</td>
+									<td>{b.status === 'verified' ? '원문 확인' : <span class="badge badge-review-required">review-required</span>}</td>
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	)
+}
+{
+	sourceList.length > 0 && (
+		<section class="doc-appendix" aria-labelledby="sources-heading">
+			<h2 id="sources-heading">공식 원문 링크</h2>
+			<ul class="source-list">
+				{sourceList.map(({ id, source: s }) =>
+					s ? (
+						<li>
+							<a href={s.url} rel="noopener noreferrer">{s.title}</a>
+							{s.version && <> · {s.version}</>}
+							{s.effectiveAt && <> · 시행 {s.effectiveAt}</>}
+							{!s.effectiveAt && s.promulgatedAt && <> · 발행 {s.promulgatedAt}</>}
+							<> · 확인일 {s.lastChecked}</>
+							{s.verification !== 'verified' && <> <span class="badge badge-review-required">버전·URL 확인 필요</span></>}
+						</li>
+					) : (
+						<li><code>{id}</code> <span class="badge badge-review-required">레지스트리에 없음</span></li>
+					),
+				)}
+			</ul>
+			<p class="appendix-hint"><a href={`${base}/about/sources/`}>전체 출처 레지스트리 보기</a></p>
+		</section>
+	)
+}
+{
+	relatedList.length > 0 && (
+		<section class="doc-appendix" aria-labelledby="related-heading">
+			<h2 id="related-heading">관련 문서</h2>
+			<ul>
+				{relatedList.map((d) => (
+					<li><a href={`${base}/${d.id}/`}>{d.title}</a></li>
+				))}
+			</ul>
+		</section>
+	)
+}

@@ -1,0 +1,16 @@
+name: 법적 근거 오류 신고
+description: 조문·버전·시행일·해석 오류를 신고합니다
+labels: [review-required]
+body:
+  - type: input
+    id: page
+    attributes: { label: 문서 URL 또는 경로 }
+    validations: { required: true }
+  - type: textarea
+    id: problem
+    attributes: { label: 무엇이 틀렸나요? }
+    validations: { required: true }
+  - type: input
+    id: source
+    attributes: { label: 공식 원문 링크와 조항, description: "국가법령정보센터, 개인정보보호위원회 등 공식 출처" }
+    validations: { required: true }

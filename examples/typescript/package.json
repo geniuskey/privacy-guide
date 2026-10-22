@@ -1,0 +1,19 @@
+{
+  "name": "kr-privacy-examples-ts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "한국 개인정보보호 개발 가이드 - TypeScript 보안/프라이버시 구현 예제 (교육용)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

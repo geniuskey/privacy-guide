@@ -1,0 +1,33 @@
+{
+  "name": "kr-privacy-dev",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Korea Privacy Dev Guide — 한국 개발자를 위한 개인정보·보안 실무 가이드",
+  "license": "MIT",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "validate:content": "node scripts/validate-content.mjs",
+    "watch:sources": "node scripts/check-sources.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.4",
+    "@astrojs/react": "^7.1.1",
+    "@astrojs/starlight": "^0.42.6",
+    "astro": "^7.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5",
+    "yaml": "^2.9.1"
+  }
+}

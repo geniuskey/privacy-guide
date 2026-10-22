@@ -1,0 +1,4 @@
+# 법률 콘텐츠와 출처 레지스트리 변경은 검토자 승인이 필요하다 (브랜치 보호 규칙에서 "Require review from Code Owners" 활성화)
+/src/content/docs/ @geniuskey
+/data/ @geniuskey
+/skills/ @geniuskey
