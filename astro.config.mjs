@@ -29,10 +29,12 @@ export default defineConfig({
 			social: [{ icon: 'github', label: 'GitHub', href: repo }],
 			editLink: { baseUrl: `${repo}/edit/main/` },
 			lastUpdated: true,
+			head: [{ tag: 'meta', attrs: { name: 'author', content: 'Euiyun Lab' } }],
 			customCss: ['./src/styles/custom.css'],
 			components: {
 				PageTitle: './src/components/overrides/PageTitle.astro',
 				MarkdownContent: './src/components/overrides/MarkdownContent.astro',
+				Footer: './src/components/overrides/Footer.astro',
 			},
 			sidebar: [
 				{
